@@ -105,12 +105,21 @@ function fuelRequired(mass) {
   const dividedBy3 = mass / 3;
   const roundedDown = Math.floor(dividedBy3);
   const subtracted2 = roundedDown - 2;
-  return subtracted2;
+  return Math.max(subtracted2, 0);
 }
 
 const totalFuelRequired = masses.reduce((sum, nextMass) => {
-  sum += fuelRequired(nextMass);
+  let fuelForMass = fuelRequired(nextMass);
+  sum += fuelForMass;
+  while (fuelForMass > 0) {
+    fuelForMass = fuelRequired(fuelForMass);
+    sum += fuelForMass;
+  }
   return sum;
 }, 0);
 
 console.log(totalFuelRequired);
+
+
+// 4,967,194 is too high
+// 4,964,250 is too low
