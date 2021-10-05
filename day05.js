@@ -818,6 +818,8 @@ const codes = input.split('\n');
 const TOTAL_ROWS = 128;
 const TOTAL_COLUMNS = 8;
 
+let allSeatIDs = [];
+
 const answer = codes.reduce((highestID, code) => {
   const rowCode = code.slice(0, 7).split('');
   const columnCode = code.slice(7).split('');
@@ -851,7 +853,20 @@ const answer = codes.reduce((highestID, code) => {
 
 
   const seatID = rows[0] * 8 + columns[0]; // row * 8 + col
+  allSeatIDs.push(seatID);
   return Math.max(seatID, highestID);
 }, 0);
 
-console.log(answer);
+allSeatIDs.sort((a, b) => a - b); // .sort() is absurd, this sorts min to max
+
+for (let i = 0; i < allSeatIDs.length - 1; i++) {
+  const current = allSeatIDs[i];
+  const next = allSeatIDs[i+1];
+  const expected = next - 1;
+  if (current !== expected) {
+    if (current + 2 === next) {
+      // only one seat is missing
+      console.log(expected);
+    }
+  }
+}
