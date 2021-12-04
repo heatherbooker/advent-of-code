@@ -1003,19 +1003,38 @@ const input = [
 
 const numOfDigits = input[0].length;
 const countOfOnes = 0;
-const numOnes = new Array(numOfDigits).fill(countOfOnes);
+//const numOnes = new Array(numOfDigits).fill(countOfOnes);
 
-input.forEach(num => {
-  const chars = num.split('');
-  chars.forEach((char, index) => {
-    if (char === '1') { numOnes[index] += 1; }
-  });
-});
+function doTheThing(type) {
+  let remainingNumbers = [...input];
+  for (let index = 0; index < numOfDigits; index ++) {
+    let numOnes = 0;
+    remainingNumbers.forEach(num => {
+      if (num[index] === '1') { numOnes += 1; }
+    });
+    const minimumForMostCommon = remainingNumbers.length / 2;
+    if (type === 'mostCommon') {
+      if (numOnes >= minimumForMostCommon) {
+        // 1 is most common
+        remainingNumbers = remainingNumbers.filter(number => number[index] == 1);
+      } else if (numOnes < minimumForMostCommon) {
+        remainingNumbers = remainingNumbers.filter(number => number[index] == 0);
+      }
+    }
+    if (type === 'leastCommon') {
+      if (numOnes >= minimumForMostCommon) {
+        // 0 is least common
+        remainingNumbers = remainingNumbers.filter(number => number[index] == 0);
+      } else if (numOnes < minimumForMostCommon) {
+        remainingNumbers = remainingNumbers.filter(number => number[index] == 1);
+      }
+    }
+    if (remainingNumbers.length === 1) {break;}
+  }
 
-const totalInputs = input.length;
-const minimumForMostCommon = totalInputs / 2;
-const gammaArray = numOnes.map(num => num > minimumForMostCommon ? 1 : 0);
-const epsilonArray = gammaArray.map(num => num === 0 ? 1 : 0);
-const gammaInDecimal = parseInt(gammaArray.join(''), 2);
-const epsilonInDecimal = parseInt(epsilonArray.join(''), 2);
-console.log(gammaInDecimal * epsilonInDecimal);
+  return (remainingNumbers);
+}
+
+const ogr = parseInt(doTheThing('mostCommon'), 2);
+const co2 = parseInt(doTheThing('leastCommon'), 2);
+console.log(ogr * co2);
