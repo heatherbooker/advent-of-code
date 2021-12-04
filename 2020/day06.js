@@ -2236,11 +2236,32 @@ v
 qwmfrncxb
 drjqglsakpwtbi
 `;
+const input2 = `abc
 
-const grouped = input.split(/\n\n/);
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b`;
+
+const grouped = input2.split(/\n\n/);
 
 const total = grouped.reduce((sum, group) => {
-  const uniqueLetters = new Set(group.replace(/\n/g, ''));
+  //per group:
+  //split on new line
+  //count entries
+  //find intersection, count that
+  //add sum to total
+  const split = group.split(/\n/);
+  const uniqueLetters = new Set();
   return sum + uniqueLetters.size;
 }, 0);
 
