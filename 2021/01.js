@@ -2004,10 +2004,12 @@ const input = `
 const depths = input.split('\n').filter(x => x.length).map(Number);
 let numOfIncreases = 0;
 
-for (let i = 1; i < depths.length; i++) {
-  if (depths[i] > depths[i-1]) {
-    // increased
-    numOfIncreases++;
+for (let i = 0; i < depths.length - 3; i++) {
+  const firstSum = depths[i] + depths[i+1] + depths[i+2];
+  const secondSum = depths[i+1] + depths[i+2] + depths[i+3];
+  const diff = secondSum - firstSum;
+  if (diff > 0) {
+    numOfIncreases += 1;
   }
 }
 
