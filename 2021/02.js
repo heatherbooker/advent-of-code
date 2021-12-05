@@ -1006,6 +1006,7 @@ const instructions = rawInstructions.map(row => row.split(' '));
 
 let horizontal = 0;
 let depth = 0;
+let aim = 0;
 
 instructions.forEach(instructo => {
   const type = instructo[0];
@@ -1014,12 +1015,13 @@ instructions.forEach(instructo => {
   switch (type) {
     case 'forward':
       horizontal += amount;
+      depth += (aim * amount);
       break;
     case 'down':
-      depth += amount;
+      aim += amount;
       break;
     case 'up':
-      depth -= amount;
+      aim -= amount;
       break;
     default:
       console.log('wat');
