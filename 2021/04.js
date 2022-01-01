@@ -20,8 +20,10 @@ const input = `
  2  0 12  3  7
 `;
 
+// parse input
+
 const sections = input.split('\n');
-const calledNumbers = sections[1];
+const calledNumbers = sections[1].split(',').map(Number);
 console.log(calledNumbers);
 
 const boards = [];
@@ -34,3 +36,25 @@ for (let i = 2; i < sections.length - 1; i++) {
   }
 }
 console.log(boards);
+
+// check boards
+for (let i = 0; i < calledNumbers.length; i++) {
+  boards.forEach(board => {
+    // determine if have row or col of Xs
+    for (let k = 0; k < board.length; k++) {
+      if (board[
+    board.forEach(row => {
+      const numsLeft = row.filter(value => value != 'X');
+      if (numsLeft.length === 0) { break; }
+      if (board.map(row => row[0]
+
+      row.forEach((number, j) => {
+        if (number == calledNumbers[i]) {
+          row[j] = 'X';
+        }
+      });
+    });
+  });
+}
+
+// calculate score
