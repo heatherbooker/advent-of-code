@@ -607,20 +607,20 @@ const input = `
 const sections = input.split('\n');
 const numbersToCall = sections[1].split(',').map(Number);
 
-const boards = [];
+const initialBoards = [];
 for (let i = 2; i < sections.length - 1; i++) {
   const isStartOfNewBoard = sections[i].length === 0;
   if (isStartOfNewBoard) {
     const board = sections.slice(i+1, i+6);
     const prettifiedBoard = board.map(row => row.split(' ').filter(x => x.length).map(Number));
-    boards.push(prettifiedBoard);
+    initialBoards.push(prettifiedBoard);
   }
 }
 
 
 let finalNumber = null;
 
-function playToWin() {
+function playToWin(boards) {
   for (const calledNumber of numbersToCall) {
     finalNumber = calledNumber;
     for (const board of boards) {
@@ -651,7 +651,13 @@ function playToWin() {
   };
 }
 
-const winningBoard = playToWin();
+while (initialBoards.length > 1) {
+  const winningBoard = playToWin(initialBoards);
+  const winningBoardIndex = initialBoards.indexOf(winningBoard);
+  initialBoards.splice(winningBoardIndex, 1);
+}
+
+const finalBoard = playToWin(initialBoards);
 
 function getScore(board) {
   let score = 0;
@@ -665,6 +671,6 @@ function getScore(board) {
   return score * finalNumber;
 }
 
-const winningScore = getScore(winningBoard);
+const winningScore = getScore(finalBoard);
 
 console.log(winningScore);
