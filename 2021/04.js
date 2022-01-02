@@ -23,22 +23,42 @@ const input = `
 // parse input
 
 const sections = input.split('\n');
-const calledNumbers = sections[1].split(',').map(Number);
-console.log(calledNumbers);
+const numbersToCall = sections[1].split(',').map(Number);
+console.log(numbersToCall);
 
 const boards = [];
 for (let i = 2; i < sections.length - 1; i++) {
   const isStartOfNewBoard = sections[i].length === 0;
   if (isStartOfNewBoard) {
     const board = sections.slice(i+1, i+6);
-    const prettifiedBoard = board.map(row => row.split(' ').filter(x => x.length));
+    const prettifiedBoard = board.map(row => row.split(' ').filter(x => x.length).map(Number));
     boards.push(prettifiedBoard);
   }
 }
 console.log(boards);
 
+
+callerLoop: for (const calledNumber of numbersToCall) {
+  for (const board of boards) {
+    for (const row of board) {
+      // mark called number
+      const indexOfCalledNumber = row.indexOf(calledNumber);
+      if (indexOfCalledNumber > -1) {
+        row[indexOfCalledNumber] = null;
+      }
+      // check horizontal
+      if (row.every(number => number === null)) {
+        break callerLoop;
+      }
+    };
+  };
+};
+
+console.log(boards);
+
 // check boards
-for (let i = 0; i < calledNumbers.length; i++) {
+/*
+for (let i = 0; i < numbersToCall.length; i++) {
   boards.forEach(board => {
     // determine if have row or col of Xs
     for (let k = 0; k < board.length; k++) {
@@ -49,12 +69,13 @@ for (let i = 0; i < calledNumbers.length; i++) {
       if (board.map(row => row[0]
 
       row.forEach((number, j) => {
-        if (number == calledNumbers[i]) {
+        if (number == numbersToCall[i]) {
           row[j] = 'X';
         }
       });
     });
   });
 }
+*/
 
 // calculate score
