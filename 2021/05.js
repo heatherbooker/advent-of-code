@@ -44,18 +44,28 @@ const floor = new Array(size).fill(true).map(() => new Array(size).fill(0));
 // ACTUALLY CHECK WHERE VENTS ARE
 
 function markVents() {
-  lines.filter(line => {
-    // ensure it's not diagonal
-    return line.start.x === line.end.x || line.start.y === line.end.y;
-  }).forEach(line => {
-    if (line.start.x !== line.end.x) {
-      //when we do diagonal: make sure x is less than y!
+  lines.forEach(line => {
+    if (line.start.x !== line.end.x && line.start.y === line.end.y) { // horizontal line
       for (let i = line.start.x; i <= line.end.x; i ++) {
         floor[i][line.start.y] = floor[i][line.start.y] + 1; // line.end.y should be the same, doesnt matter which one we use
       }
-    } else {
+    } else if (line.start.y !== line.end.y && line.start.x === line.end.x) { // vertical line
       for (let i = line.start.y; i <= line.end.y; i ++) {
         floor[line.start.x][i] ++; // line.end.x should be the same, doesnt matter which one we use
+      }
+    } else if (line.start.x < line.end.x) { // diagonal line, x increasing
+      let j = line.start.y;
+      function updateY(currentY) { return currentY > line.end.y ? currentY - 1 : currentY + 1; }
+      for (let i = line.start.x; i <= line.end.x; i ++) {
+        floor[i][j] = floor[i][j] + 1;
+        j = updateY(j);
+      }
+    } else if (line.start.y < line.end.y) { // diagonal line, y increasing
+      let j = line.start.x;
+      function updateX(currentX) { return currentX > line.end.x ? currentX - 1 : currentX + 1; }
+      for (let i = line.start.y; i <= line.end.y; i ++) {
+        floor[j][i] = floor[j][i] + 1;
+        j = updateX(j);
       }
     }
   });
@@ -66,5 +76,6 @@ function countOverlaps() {
     return totalOverlaps + currentArray.filter(numberOfVents => numberOfVents >= 2).length
   }, 0);
 }
+
 markVents();
 console.log(countOverlaps());
