@@ -6,12 +6,15 @@ const maxPosition = Math.max(...crabPositions);
 let minDifference = Infinity;
 
 for (let position = 0; position <= maxPosition; position ++) {
-  let difference = 0;
+  let totalDifference = 0;
   crabPositions.forEach(crab => {
-    difference += Math.abs(crab - position);
+    const diffForCrab = Math.abs(crab - position);
+    for (let i = 0; i <= diffForCrab; i ++) {
+      totalDifference += i;
+    }
   });
-  if (difference < minDifference) {
-    minDifference = difference;
+  if (totalDifference < minDifference) {
+    minDifference = totalDifference;
   }
 }
 console.log(minDifference);
