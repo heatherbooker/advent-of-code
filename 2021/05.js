@@ -21,16 +21,17 @@ function findStart(line) {
   }
 }
 
-// decode points
-const inputLines = input.split('\n').filter(x => x.length);
-const lines = inputLines.map(line => {
-  const pointsString = line.split(' -> ');
-  const points = pointsString.map(s => {
-    const [x, y] = s.split(',').map(Number);
-    return { x, y };
+function decodePoints(input) {
+  const inputLines = input.split('\n').filter(x => x.length);
+  return inputLines.map(line => {
+    const pointsString = line.split(' -> ');
+    const points = pointsString.map(s => {
+      const [x, y] = s.split(',').map(Number);
+      return { x, y };
+    });
+    return findStart(points);
   });
-  return findStart(points);
-});
+}
 
 
 function findFloorSize(lines) {
@@ -38,12 +39,13 @@ function findFloorSize(lines) {
   const maxY = lines.reduce((max, curr) => curr.start.y > max ? curr.start.y : max, 0);
   return Math.max(maxX, maxY) + 1; // graph starts at 0, so we add 1 for its space
 }
-const size = findFloorSize(lines);
-const floor = new Array(size).fill(true).map(() => new Array(size).fill(0));
+
 
 // ACTUALLY CHECK WHERE VENTS ARE
 
-function markVents() {
+function markVents(size, lines) {
+  const floor = new Array(size).fill(true).map(() => new Array(size).fill(0));
+
   lines.forEach(line => {
     if (line.start.x !== line.end.x && line.start.y === line.end.y) { // horizontal line
       for (let i = line.start.x; i <= line.end.x; i ++) {
@@ -65,13 +67,23 @@ function markVents() {
       }
     }
   });
+  return floor;
 }
 
-function countOverlaps() {
+function countOverlaps(floor) {
   return floor.reduce((totalOverlaps, currentArray) => {
     return totalOverlaps + currentArray.filter(numberOfVents => numberOfVents >= 2).length
   }, 0);
 }
 
-markVents();
-console.log(countOverlaps());
+
+// MAIN
+
+function solve() {
+  const lines = decodePoints(input);
+  const size = findFloorSize(lines);
+  const floor = markVents(size, lines);
+  console.log(countOverlaps(floor));
+}
+
+solve();
