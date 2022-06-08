@@ -53,19 +53,15 @@ function markVents() {
       for (let i = line.start.y; i <= line.end.y; i ++) {
         floor[line.start.x][i] ++; // line.end.x should be the same, doesnt matter which one we use
       }
-    } else if (line.start.x < line.end.x) { // diagonal line, x increasing
-      let j = line.start.y;
-      function updateY(currentY) { return currentY > line.end.y ? currentY - 1 : currentY + 1; }
-      for (let i = line.start.x; i <= line.end.x; i ++) {
-        floor[i][j] = floor[i][j] + 1;
-        j = updateY(j);
-      }
-    } else if (line.start.y < line.end.y) { // diagonal line, y increasing
-      let j = line.start.x;
-      function updateX(currentX) { return currentX > line.end.x ? currentX - 1 : currentX + 1; }
-      for (let i = line.start.y; i <= line.end.y; i ++) {
-        floor[j][i] = floor[j][i] + 1;
-        j = updateX(j);
+    } else { // diagonal line
+      let xIndex = line.start.x;
+      let yIndex = line.start.y;
+
+      while (xIndex <= line.end.x || yIndex <= line.end.y) {
+        floor[xIndex][yIndex] = floor[xIndex][yIndex] + 1;
+
+        xIndex = xIndex <= line.end.x ? xIndex + 1 : xIndex - 1;
+        yIndex = yIndex <= line.end.y ? yIndex + 1 : yIndex - 1;
       }
     }
   });
